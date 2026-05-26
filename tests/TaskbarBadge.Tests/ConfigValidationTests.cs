@@ -33,4 +33,10 @@ public sealed class ConfigValidationTests
         Assert.Equal("#FF00AA", config.BackgroundColor);
         Assert.Equal("#123456", config.TextColor);
     }
+
+    [Fact]
+    public void DefaultConfigKeepsOverlayHidden()
+    {
+        Assert.False(BadgeConfig.Default.ShowBadge);
+    }
 }

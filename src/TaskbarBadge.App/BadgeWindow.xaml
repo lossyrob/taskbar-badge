@@ -8,7 +8,9 @@
         ShowInTaskbar="False"
         SizeToContent="Manual"
         Topmost="True"
-        WindowStyle="None">
+        WindowStyle="None"
+        MouseLeftButtonDown="Window_MouseLeftButtonDown"
+        MouseLeftButtonUp="Window_MouseLeftButtonUp">
     <Border x:Name="BadgeBorder"
             Background="#0078D4"
             BorderBrush="#40FFFFFF"

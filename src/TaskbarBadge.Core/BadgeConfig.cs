@@ -29,7 +29,13 @@ public sealed record BadgeConfig
 
     public double CrossTaskbarOffset { get; init; } = 0;
 
-    public bool ShowBadge { get; init; } = true;
+    public double? OverlayLeft { get; init; }
+
+    public double? OverlayTop { get; init; }
+
+    public bool LockOverlayPosition { get; init; }
+
+    public bool ShowBadge { get; init; }
 
     public bool RunAtStartup { get; init; } = true;
 

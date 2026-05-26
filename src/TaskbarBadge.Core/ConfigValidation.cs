@@ -16,7 +16,9 @@ public static class ConfigValidation
             FontSize = Clamp(config.FontSize, 8, 48),
             Opacity = Clamp(config.Opacity, 0.2, 1),
             AlongTaskbarOffset = Clamp(config.AlongTaskbarOffset, -2000, 4000),
-            CrossTaskbarOffset = Clamp(config.CrossTaskbarOffset, -400, 400)
+            CrossTaskbarOffset = Clamp(config.CrossTaskbarOffset, -400, 400),
+            OverlayLeft = NormalizeNullableCoordinate(config.OverlayLeft),
+            OverlayTop = NormalizeNullableCoordinate(config.OverlayTop)
         };
     }
 
@@ -51,5 +53,15 @@ public static class ConfigValidation
         return int.TryParse(value[1..], NumberStyles.HexNumber, CultureInfo.InvariantCulture, out _)
             ? value.ToUpperInvariant()
             : fallback;
+    }
+
+    private static double? NormalizeNullableCoordinate(double? value)
+    {
+        if (value is null || double.IsNaN(value.Value) || double.IsInfinity(value.Value))
+        {
+            return null;
+        }
+
+        return Clamp(value.Value, -10000, 10000);
     }
 }

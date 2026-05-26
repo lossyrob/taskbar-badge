@@ -2,12 +2,13 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="TaskbarBadge Settings"
-        Width="420"
-        Height="520"
+        Width="460"
+        Height="680"
         ResizeMode="NoResize">
     <Grid Margin="16">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
@@ -33,11 +34,25 @@
             <TextBlock Grid.Row="0" Grid.Column="0" Margin="0,0,8,10" VerticalAlignment="Center" Text="Label" />
             <TextBox x:Name="LabelBox" Grid.Row="0" Grid.Column="1" Margin="0,0,0,10" />
 
-            <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,0,8,10" VerticalAlignment="Center" Text="Background color" />
-            <TextBox x:Name="BackgroundColorBox" Grid.Row="1" Grid.Column="1" Margin="0,0,0,10" />
+            <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,0,8,10" VerticalAlignment="Center" Text="Badge color" />
+            <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,0,0,10">
+                <Button x:Name="BackgroundColorButton"
+                        Height="30"
+                        HorizontalContentAlignment="Center"
+                        Click="BackgroundColorButton_Click"
+                        Content="Choose..." />
+                <WrapPanel x:Name="BackgroundPresetPanel" Margin="0,4,0,0" />
+            </StackPanel>
 
             <TextBlock Grid.Row="2" Grid.Column="0" Margin="0,0,8,10" VerticalAlignment="Center" Text="Text color" />
-            <TextBox x:Name="TextColorBox" Grid.Row="2" Grid.Column="1" Margin="0,0,0,10" />
+            <StackPanel Grid.Row="2" Grid.Column="1" Margin="0,0,0,10">
+                <Button x:Name="TextColorButton"
+                        Height="30"
+                        HorizontalContentAlignment="Center"
+                        Click="TextColorButton_Click"
+                        Content="Choose..." />
+                <WrapPanel x:Name="TextPresetPanel" Margin="0,4,0,0" />
+            </StackPanel>
 
             <TextBlock Grid.Row="3" Grid.Column="0" Margin="0,0,8,10" VerticalAlignment="Center" Text="Width" />
             <TextBox x:Name="WidthBox" Grid.Row="3" Grid.Column="1" Margin="0,0,0,10" />
@@ -61,7 +76,11 @@
             <TextBox x:Name="CrossOffsetBox" Grid.Row="9" Grid.Column="1" Margin="0,0,0,10" />
 
             <StackPanel Grid.Row="10" Grid.ColumnSpan="2">
-                <CheckBox x:Name="ShowBadgeBox" Margin="0,4" Content="Show badge" />
+                <TextBlock Margin="0,8,0,4"
+                           FontWeight="SemiBold"
+                           Text="The tray icon is always shown. The overlay badge is optional and can be dragged when unlocked." />
+                <CheckBox x:Name="ShowBadgeBox" Margin="0,4" Content="Show overlay badge" />
+                <CheckBox x:Name="LockOverlayBox" Margin="0,4" Content="Lock overlay position" />
                 <CheckBox x:Name="RunAtStartupBox" Margin="0,4" Content="Start with Windows" />
             </StackPanel>
         </Grid>

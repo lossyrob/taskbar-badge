@@ -2,21 +2,22 @@
 
 ## Badge is not visible
 
-1. Check the tray icon and ensure **Show badge** is enabled.
-2. Open Settings and reduce `AlongTaskbarOffset` or reset placement values.
-3. Confirm the app is running in Task Manager as `TaskbarBadge`.
+1. Check whether the tray icon is hidden behind the taskbar corner overflow (`^`) menu.
+2. Use the tray menu item **Open Windows taskbar settings**, then enable TaskbarBadge under taskbar corner/other system tray icons if you want persistent visibility.
+3. If you mean the overlay badge, check the tray menu and ensure **Show overlay badge** is enabled.
+4. Open Settings or use **Reset overlay position** from the tray menu.
+5. Confirm the app is running in Task Manager as `TaskbarBadge`.
 
 ## Badge is in the wrong place
 
-TaskbarBadge positions an overlay near the taskbar. Open Settings and adjust:
+TaskbarBadge has a Windows-managed tray icon and an optional overlay. If the overlay is in the wrong place:
 
-- `Anchor`
-- `AlongTaskbarOffset`
-- `CrossTaskbarOffset`
-- `Width`
-- `Height`
+- Unlock overlay position.
+- Drag the overlay to the desired place.
+- Lock overlay position again.
+- Use **Reset overlay position** to return to calculated placement.
 
-Primary-taskbar placement is the initial supported mode.
+The calculated placement uses the primary taskbar as a starting point.
 
 ## Badge disappeared after Explorer restarted
 
