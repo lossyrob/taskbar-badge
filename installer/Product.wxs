@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Package
+    Name="TaskbarBadge"
+    Manufacturer="lossyrob"
+    Version="$(var.ProductVersion)"
+    UpgradeCode="f98bc6f3-20d8-4df2-b809-23bb83fe5971"
+    Scope="perUser">
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of TaskbarBadge is already installed." />
+    <MediaTemplate EmbedCab="yes" />
+
+    <Feature Id="MainFeature" Title="TaskbarBadge" Level="1">
+      <ComponentRef Id="TaskbarBadgeExeComponent" />
+      <ComponentRef Id="StartMenuShortcutComponent" />
+    </Feature>
+
+    <StandardDirectory Id="LocalAppDataFolder">
+      <Directory Id="InstallFolder" Name="TaskbarBadge" />
+    </StandardDirectory>
+
+    <StandardDirectory Id="ProgramMenuFolder">
+      <Directory Id="ApplicationProgramsFolder" Name="TaskbarBadge" />
+    </StandardDirectory>
+
+    <Component Id="TaskbarBadgeExeComponent" Directory="InstallFolder" Guid="9ebf535a-b2af-4ba8-b2d3-2a76928038fe">
+      <File Id="TaskbarBadgeExe" Source="$(var.PublishDir)\TaskbarBadge.exe" KeyPath="yes" />
+    </Component>
+
+    <Component Id="StartMenuShortcutComponent" Directory="ApplicationProgramsFolder" Guid="2b208633-8ff5-4d3a-9ff7-03487a84d19e">
+      <Shortcut
+        Id="StartMenuShortcut"
+        Name="TaskbarBadge"
+        Description="Configurable Windows taskbar identity badge"
+        Target="[InstallFolder]TaskbarBadge.exe"
+        WorkingDirectory="InstallFolder" />
+      <RemoveFolder Id="RemoveStartMenuFolder" On="uninstall" />
+      <RegistryValue Root="HKCU" Key="Software\TaskbarBadge" Name="Installed" Type="integer" Value="1" KeyPath="yes" />
+    </Component>
+  </Package>
+</Wix>

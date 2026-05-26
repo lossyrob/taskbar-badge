@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/TaskbarBadge.App/TaskbarBadge.App.csproj" />
+    <Project Path="src/TaskbarBadge.Core/TaskbarBadge.Core.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/TaskbarBadge.Tests/TaskbarBadge.Tests.csproj" />
+  </Folder>
+</Solution>

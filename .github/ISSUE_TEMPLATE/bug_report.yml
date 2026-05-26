@@ -1,0 +1,32 @@
+name: Bug report
+description: Report a problem with TaskbarBadge
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: input
+    id: version
+    attributes:
+      label: TaskbarBadge version
+      placeholder: "0.1.0"
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Windows environment
+      description: Include Windows version, monitor layout, taskbar position, DPI/scaling, and whether this is local, RDP, Dev Box, or Cloud PC.
+    validations:
+      required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: What happened?
+      description: Describe expected and actual behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: config
+    attributes:
+      label: Config/logs
+      description: Paste relevant `%APPDATA%\TaskbarBadge\config.json` and log details if available.
+      render: text
