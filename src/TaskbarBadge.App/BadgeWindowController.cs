@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media;
 using System.Windows.Threading;
+using Microsoft.Win32;
 using TaskbarBadge.Core;
 
 namespace TaskbarBadge.App;
@@ -16,6 +17,7 @@ public sealed class BadgeWindowController : IDisposable
     private readonly DispatcherTimer _positionTimer;
     private BadgeConfig _config;
     private DesktopRect? _lastLoggedBadge;
+    private TaskbarSnapshot? _lastTaskbar;
     private bool _hiddenForFullscreen;
     private int _fullscreenTicks;
     private int _nonFullscreenTicks;
@@ -36,6 +38,7 @@ public sealed class BadgeWindowController : IDisposable
         };
         _positionTimer.Tick += (_, _) => PositionWindow();
         _positionTimer.Start();
+        SystemEvents.DisplaySettingsChanged += OnDisplaySettingsChanged;
     }
 
     public BadgeConfig CurrentConfig => _config;
@@ -88,6 +91,20 @@ public sealed class BadgeWindowController : IDisposable
         var badge = _config.OverlayLeft is not null && _config.OverlayTop is not null
             ? new DesktopRect(_config.OverlayLeft.Value, _config.OverlayTop.Value, _config.Width, _config.Height)
             : PlacementCalculator.Calculate(_config, dipTaskbar);
+
+        if (_config.OverlayLeft is not null
+            && _config.OverlayTop is not null
+            && _lastTaskbar is not null
+            && HasTaskbarChanged(_lastTaskbar, dipTaskbar))
+        {
+            badge = PlacementCalculator.RepositionRelativeToTaskbar(
+                badge,
+                _lastTaskbar.Bounds,
+                dipTaskbar.Bounds);
+            SaveOverlayPosition(badge.Left, badge.Top);
+        }
+
+        _lastTaskbar = dipTaskbar;
 
         if (UpdateFullscreenState(badge))
         {
@@ -168,10 +185,15 @@ public sealed class BadgeWindowController : IDisposable
 
     private void SaveOverlayPosition()
     {
+        SaveOverlayPosition(_window.Left, _window.Top);
+    }
+
+    private void SaveOverlayPosition(double left, double top)
+    {
         _config = _config with
         {
-            OverlayLeft = _window.Left,
-            OverlayTop = _window.Top
+            OverlayLeft = left,
+            OverlayTop = top
         };
         _configStore.Save(_config);
     }
@@ -182,6 +204,16 @@ public sealed class BadgeWindowController : IDisposable
             || Math.Abs(previous.Top - current.Top) > 0.5
             || Math.Abs(previous.Width - current.Width) > 0.5
             || Math.Abs(previous.Height - current.Height) > 0.5;
+    }
+
+    private static bool HasTaskbarChanged(TaskbarSnapshot previous, TaskbarSnapshot current)
+    {
+        return previous.Edge != current.Edge || HasMoved(previous.Bounds, current.Bounds);
+    }
+
+    private void OnDisplaySettingsChanged(object? sender, EventArgs e)
+    {
+        _ = _window.Dispatcher.BeginInvoke(PositionWindow);
     }
 
     private static bool IsForegroundWindowFullscreenOnBadgeScreen(DesktopRect badge)
@@ -218,6 +250,7 @@ public sealed class BadgeWindowController : IDisposable
 
     public void Dispose()
     {
+        SystemEvents.DisplaySettingsChanged -= OnDisplaySettingsChanged;
         _positionTimer.Stop();
         _window.Close();
     }

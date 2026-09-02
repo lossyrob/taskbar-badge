@@ -57,4 +57,38 @@ public sealed class PlacementCalculatorTests
         Assert.Equal(-5, badge.Left);
         Assert.Equal(16, badge.Top);
     }
+
+    [Fact]
+    public void RepositionRelativeToTaskbarPreservesRelativePositionAfterResolutionChange()
+    {
+        var badge = new DesktopRect(3000, 2124, 220, 32);
+        var previousTaskbar = new DesktopRect(0, 2120, 3840, 40);
+        var currentTaskbar = new DesktopRect(0, 1040, 1920, 40);
+
+        var repositioned = PlacementCalculator.RepositionRelativeToTaskbar(
+            badge,
+            previousTaskbar,
+            currentTaskbar);
+
+        Assert.Equal(1408.84, repositioned.Left, 2);
+        Assert.Equal(1044, repositioned.Top);
+        Assert.Equal(badge.Width, repositioned.Width);
+        Assert.Equal(badge.Height, repositioned.Height);
+    }
+
+    [Fact]
+    public void RepositionRelativeToTaskbarAccountsForDesktopOriginChange()
+    {
+        var badge = new DesktopRect(1620, 1044, 220, 32);
+        var previousTaskbar = new DesktopRect(0, 1040, 1920, 40);
+        var currentTaskbar = new DesktopRect(-2560, 1400, 2560, 40);
+
+        var repositioned = PlacementCalculator.RepositionRelativeToTaskbar(
+            badge,
+            previousTaskbar,
+            currentTaskbar);
+
+        Assert.Equal(-330.12, repositioned.Left, 2);
+        Assert.Equal(1404, repositioned.Top);
+    }
 }
