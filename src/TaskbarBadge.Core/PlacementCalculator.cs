@@ -15,6 +15,30 @@ public static class PlacementCalculator
         };
     }
 
+    public static DesktopRect RepositionRelativeToTaskbar(
+        DesktopRect badge,
+        DesktopRect previousTaskbar,
+        DesktopRect currentTaskbar)
+    {
+        return badge with
+        {
+            Left = RepositionCoordinate(
+                badge.Left,
+                badge.Width,
+                previousTaskbar.Left,
+                previousTaskbar.Width,
+                currentTaskbar.Left,
+                currentTaskbar.Width),
+            Top = RepositionCoordinate(
+                badge.Top,
+                badge.Height,
+                previousTaskbar.Top,
+                previousTaskbar.Height,
+                currentTaskbar.Top,
+                currentTaskbar.Height)
+        };
+    }
+
     private static DesktopRect CalculateHorizontalTaskbar(BadgeConfig config, DesktopRect bounds)
     {
         var left = config.Anchor switch
@@ -41,5 +65,25 @@ public static class PlacementCalculator
 
         var left = bounds.Left + ((bounds.Width - config.Width) / 2) + config.CrossTaskbarOffset;
         return new DesktopRect(left, top, config.Width, config.Height);
+    }
+
+    private static double RepositionCoordinate(
+        double itemStart,
+        double itemExtent,
+        double previousStart,
+        double previousExtent,
+        double currentStart,
+        double currentExtent)
+    {
+        var previousRange = previousExtent - itemExtent;
+        var currentRange = currentExtent - itemExtent;
+
+        if (Math.Abs(previousRange) < 0.001)
+        {
+            return currentStart + (currentRange / 2);
+        }
+
+        var relativePosition = (itemStart - previousStart) / previousRange;
+        return currentStart + (relativePosition * currentRange);
     }
 }
